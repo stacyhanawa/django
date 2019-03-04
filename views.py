@@ -10,10 +10,14 @@ templates_base = "base.html"
 def convert(file_path):
     file_name = os.path.basename(file_path)
     page_title, extension = os.path.splitext(file_name)
+    if page_title == "index":
+        output_filename = "/"
+    else:
+        output_filename = page_title
     return {
                 "filename": file_path,
                 "title": page_title,
-                "output_filename": file_name
+                "output_filename": output_filename
            }
 
 def navigation():
@@ -33,7 +37,7 @@ def index(request):
     context = {
         "content": index_html,
         "pages": pages,
-        "selected": "index.html"
+        "selected": "/"
     }
     return render(request, templates_base, context)
 
@@ -42,7 +46,7 @@ def about(request):
     context = {
         "content": about_html,
         "pages": pages,
-        "selected": "about.html"
+        "selected": "about"
     }
     return render(request, templates_base, context)
     
@@ -51,7 +55,7 @@ def contact(request):
     context = {
         "content": contact_html,
         "pages": pages,
-        "selected": "contact.html"
+        "selected": "contact"
     }
     return render(request, templates_base, context)
 
@@ -60,7 +64,7 @@ def post(request):
     context = {
         "content": post_html,
         "pages": pages,
-        "selected": "post.html"
+        "selected": "post"
     }
     return render(request, templates_base, context)
 
