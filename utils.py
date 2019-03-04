@@ -37,6 +37,3 @@ def main():
             selected = page["output_filename"]
         )
         open(page['output'], "w+").write(page_html)
-    
-if __name__ == "__main__":
-    main()
