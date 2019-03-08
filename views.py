@@ -5,8 +5,6 @@ import requests
 from django.http import HttpResponse
 from django.shortcuts import render
 
-templates_base = "base.html"
-
 def convert(file_path):
     file_name = os.path.basename(file_path)
     page_title, extension = os.path.splitext(file_name)
@@ -21,7 +19,8 @@ def convert(file_path):
            }
 
 def navigation():
-    all_html_files = glob.glob("content/*.html")
+    all_html_files = glob.glob("templates/*.html")
+    all_html_files.remove("templates/base.html")
     
     pages = []
 
@@ -33,59 +32,38 @@ def navigation():
 pages = navigation()
 
 def index(request):
-    index_html = open("content/index.html").read()
+    index_html = open("templates/index.html").read()
     context = {
-        "content": index_html,
         "pages": pages,
         "selected": "/"
     }
-    return render(request, templates_base, context)
+    return render(request, "index.html", context)
 
 def about(request):
-    about_html = open("content/about.html").read()
+    about_html = open("templates/about.html").read()
+    response = requests.get('https://api.github.com/users/stacyhanawa/repos')
+    repos = response.json()
     context = {
-        "content": about_html,
         "pages": pages,
-        "selected": "about"
+        "selected": "about",
+        "github_repos": repos,
     }
-    return render(request, templates_base, context)
+    return render(request, "about.html", context)
     
 def contact(request):
-    contact_html = open("content/contact.html").read()
+    contact_html = open("templates/contact.html").read()
     context = {
-        "content": contact_html,
         "pages": pages,
         "selected": "contact"
     }
-    return render(request, templates_base, context)
+    return render(request, "contact.html", context)
 
 def post(request):
-    post_html = open("content/post.html").read()
+    post_html = open("templates/post.html").read()
     context = {
-        "content": post_html,
         "pages": pages,
         "selected": "post"
     }
-    return render(request, templates_base, context)
+    return render(request, "post.html", context)
 
-
-#def about(request):
-#    # Django comes with a "shortcut" function called "render", that
-#    # lets us read in HTML template files in separate directories to
-#    # keep our code better organized.
-#    context = {
-#        'name': 'Ash Ketchum',
-#        'pokemon': 'Pikachu',
-#    }
-#    return render(request, 'about.html', context)
-
-
-#def post(request):
-#    # We can also combine Django with APIs
-#    response = requests.get('https://api.github.com/users/michaelpb/repos')
-#    repos = response.json()
-#    context = {
-#        'github_repos': repos,
-#    }
-#    return render(request, 'post.html', context)
 
